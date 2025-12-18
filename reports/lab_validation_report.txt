@@ -1,0 +1,83 @@
+================================================================================
+  QUANTITATIVE STRATEGY RESEARCH & VALIDATION TEAR SHEET
+================================================================================
+
+[1] TRANSACTION COST & FRICTION ANALYSIS
+--------------------------------------------------------------------------------
+Strategy Name:         DualMA(5,40,ema)
+Total Trade Turnover:  47 rebalance events
+Total Friction Drag:   4.75% cumulative return lost to costs
+Cost Model Specs:      5.0 bps comm + 2.0 bps half-spread + 3.0 bps slippage
+
+Performance Comparison (Pre- vs Post-Friction):
+           Metric Gross (Pre-Cost) Net (Post-Cost)
+      CAGR Return           -4.48%          -5.61%
+Annual Volatility           11.23%          11.24%
+     Sharpe Ratio           -0.351          -0.458
+    Sortino Ratio           -0.473          -0.613
+     Max Drawdown           24.39%          26.36%
+     Calmar Ratio           -0.183          -0.213
+         Win Rate           51.35%          48.60%
+    Profit Factor            0.916           0.893
+
+
+[2] CHRONOLOGICAL OUT-OF-SAMPLE (OOS) HOLDOUT EVALUATION
+--------------------------------------------------------------------------------
+Partition Scheme:      70% In-Sample / 30% Out-of-Sample Holdout
+Selected Best IS:      DualMA(20,60,ema) (Index 17)
+Realized OOS Rank:     Rank 16 out of 20 strategies
+Sharpe Ratio Decay:    37.66% (-0.662 IS -> -0.911 OOS)
+
+In-Sample vs Holdout Metrics:
+           Metric In-Sample (Training) Out-of-Sample (Holdout)
+      CAGR Return               -7.79%                 -10.75%
+Annual Volatility               11.29%                  11.73%
+     Sharpe Ratio               -0.662                  -0.911
+    Sortino Ratio               -0.875                  -1.150
+     Max Drawdown               20.54%                  19.58%
+
+
+[3] WALK-FORWARD VALIDATION (ADAPTIVE RE-OPTIMIZATION)
+--------------------------------------------------------------------------------
+Total Windows:         11
+Strategy Switches:     6 changes across windows
+Walk-Forward CAGR:     -6.83%
+Walk-Forward Sharpe:   -0.549
+Walk-Forward Max DD:   33.42%
+
+Window Breakdown (First 5 and Last 5):
+ Window Train Range Test Range  Selected Strategy IS Sharpe OOS Sharpe OOS Return
+      1     [0:252]  [252:315]  DualMA(10,40,ema)    -0.705      0.016      0.05%
+      2    [63:315]  [315:378]   DualMA(5,60,ema)    -0.426      2.806     12.22%
+      3   [126:378]  [378:441]   DualMA(5,75,ema)     0.818     -2.706     -9.03%
+      4   [189:441]  [441:504]   DualMA(5,75,ema)     0.060     -0.964     -3.43%
+      5   [252:504]  [504:567]   DualMA(5,75,ema)     0.217     -3.667    -12.31%
+      7   [378:630]  [630:693]  DualMA(15,40,ema)    -1.505     -2.476     -3.58%
+      8   [441:693]  [693:756]  DualMA(20,60,ema)    -0.861      0.000      0.00%
+      9   [504:756]  [756:819]  DualMA(20,60,ema)    -0.946      0.796      2.89%
+     10   [567:819]  [819:882] DualMA(15,100,ema)     0.684     -4.010    -13.20%
+     11   [630:882]  [882:945]   DualMA(5,50,ema)     0.136      4.978      8.82%
+
+
+[4] COMBINATORIAL SYMMETRIC CROSS-VALIDATION & PBO DIAGNOSTICS
+--------------------------------------------------------------------------------
+PBO (Bottom 50% OOS Risk)                  : 42.86%
+Probability of OOS Loss (Sharpe <= 0)      : 86.90%
+Mean IS Sharpe (Selected)                  : -0.291
+Mean OOS Sharpe (Realized)                 : -0.770
+Performance Degradation                    : 164.55%
+Median OOS Relative Rank                   : 0.381
+Best IS is Worst OOS Prob                  : 7.14%
+Strategy Universe Size (N)                 : 20
+Combinatorial Splits (C)                   : 252
+CSCV Groups (S)                            : 10
+
+Empirical Risk Assessment:
+-> Assessment: ELEVATED OVERFITTING RISK - Significant probability of underperformance.
+
+================================================================================
+METHODOLOGICAL LIMITATIONS & RISK DISCLOSURE:
+None of walk-forward validation, chronological holdouts, or CSCV/PBO guarantees
+future profitability. Financial markets exhibit non-stationarity, regime shifts,
+and structural breaks that past data validation cannot fully predict.
+================================================================================
