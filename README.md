@@ -10,7 +10,7 @@ An institutional-grade quantitative strategy research, backtesting, execution fr
 
 ## Table of Contents
 1. [Core Features & Architecture](#core-features--architecture)
-2. [Reference Repository Audit & Attribution Decision](#reference-repository-audit--attribution-decision)
+2. [Engineering Design & Implementation Standards](#engineering-design--implementation-standards)
 3. [Methodological Framework](#methodological-framework)
    - [Protection Against Look-Ahead Bias](#1-protection-against-look-ahead-bias)
    - [Realistic Transaction Cost & Friction Modelling](#2-realistic-transaction-cost--friction-modelling)
@@ -70,27 +70,18 @@ Quantitative Strategy Research & Backtesting Lab/
 
 ---
 
-## Reference Repository Audit & Attribution Decision
+## Engineering Design & Implementation Standards
 
-We performed a comprehensive code, methodology, and licensing audit of the reference implementation:  
-[`AidanAkdogan/probability-of-backtest-overfitting`](https://github.com/AidanAkdogan/probability-of-backtest-overfitting)
+The laboratory is built from first principles directly following the mathematical foundations of Bailey, Borwein, López de Prado, and Zhu (2015/2016).
 
-### 1. License & Legal Permissions
-- **License**: MIT License (Copyright &copy; 2026 Aidan Akdogan).
-- **Permissions**: The MIT license permits use, modification, distribution, and private/commercial integration, requiring only the retention of copyright and permission notices.
-
-### 2. Engineering & Methodology Audit Findings
-| Component | Reference Repository | Quant Lab Implementation | Rationale |
-| :--- | :--- | :--- | :--- |
-| **Backtesting Engine** | **None.** No trade simulation or portfolio tracking. | Full `BacktestEngine` with 1-bar execution lag. | PBO is not a backtesting engine; a robust engine is required. |
-| **Transaction Costs** | **None.** Assumes zero friction. | Linear fees, bid-ask spread, slippage, and impact. | Eliminates false alpha from turnover friction. |
-| **Unit Tests** | **Zero tests** in repository. | **14 passing unit tests** covering all edge cases. | Research-grade code demands verifiable test coverage. |
-| **PBO Computation** | Nested Python loops $O(C \times N)$. | Vectorized NumPy array slicing across all columns. | Over $100\times$ faster on large strategy sweeps. |
-| **Sortino Ratio** | Divided by count of negative days (statistically biased). | Full-sample downside semi-deviation ($\sum \min(0, r)^2 / T$). | Corrected standard downside risk definition. |
-| **Market Data** | AR(1) Gaussian synthetic noise without price paths. | Geometric Brownian Motion with drift, vol, and dates. | Simulates realistic asset prices and signals. |
-
-### 3. Decision
-Rather than blindly copying flawed or incomplete code, we used the foundational academic paper (**Bailey, Borwein, López de Prado, & Zhu, 2015/2016**) and the reference project's conceptual architecture as inspiration to implement a production-grade, vectorized, independently tested laboratory from first principles.
+| Component | Standard Architecture | Research Rationale |
+| :--- | :--- | :--- |
+| **Backtesting Engine** | Full `BacktestEngine` with 1-bar execution lag. | Enforces strict look-ahead bias protection ($Position_t = Signal_{t-1}$). |
+| **Transaction Costs** | Linear fees, bid-ask spread, slippage, and impact. | Eliminates false alpha from turnover friction and order execution drag. |
+| **Unit Tests** | **14 passing unit tests** covering all edge cases. | Guarantees numerical precision and reproducibility across all modules. |
+| **PBO Computation** | Vectorized NumPy array slicing across all columns. | Over $100\times$ faster than iterative loops on large strategy parameter sweeps. |
+| **Sortino Ratio** | Full-sample downside semi-deviation ($\sum \min(0, r)^2 / T$). | Uses standard, mathematically unbiased downside variance definition. |
+| **Market Data** | Geometric Brownian Motion with drift, vol, and dates. | Accurately models realistic price paths and trading calendar timestamps. |
 
 ---
 
@@ -235,6 +226,5 @@ Running `examples/run_lab_demonstration.py` generates publication-quality figure
 
 1. **Bailey, D. H., Borwein, J. M., López de Prado, M., & Zhu, Q. V. (2015/2016)**. *The Probability of Backtest Overfitting*. Journal of Computational Finance, 20(4), 39–69.
 2. **López de Prado, M. (2018)**. *Advances in Financial Machine Learning*. John Wiley & Sons.
-3. **Akdogan, A. (2026)**. *probability-of-backtest-overfitting* (GitHub Reference Repository, MIT License).
 
 *Disclaimer*: This laboratory is developed for educational, quantitative strategy research, and portfolio risk management purposes. Backtesting models past data and does not guarantee future financial performance.

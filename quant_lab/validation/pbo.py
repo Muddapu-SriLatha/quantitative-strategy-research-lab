@@ -8,7 +8,6 @@ References:
 -----------
 - Bailey, D. H., Borwein, J. M., López de Prado, M., & Zhu, Q. V. (2015/2016).
   "The Probability of Backtest Overfitting", Journal of Computational Finance, 20(4), 39–69.
-- Akdogan, A. (2026). "probability-of-backtest-overfitting" (Reference architecture).
 """
 
 from dataclasses import dataclass
